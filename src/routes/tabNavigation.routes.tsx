@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import theme from '../themes';
+import { theme } from '../themes';
 import PostScreen from "../pages/posts";
 import AlbumsScreen from '../pages/albums';
 import TodosScreen from '../pages/todos';
