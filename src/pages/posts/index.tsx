@@ -1,40 +1,47 @@
 import React, { useState, useEffect } from "react";
 import { FlatList } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../../components/Header";
-import { GetPosts } from "../../services/providers/postsProvider";
-import { GetAlbums } from "../../services/providers/albumsProvider";
-import { GetTodos } from "../../services/providers/todosProvider";
+import PostCard from "../../components/PostCard";
 import {
   Container,
   TitleHeader,
   BodyPosts,
-  CardPost,
-  Title,
-  SeparatorLine,
-  BodyText,
   ViewLoading,
   LoadingIcon,
   LoadingText
 } from './styles';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const Posts: React.FC = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const getDataPosts = async () => {
-    let data = await AsyncStorage.getItem("@Posts");
-    if (!data) {
-      GetPosts();
-      data = await AsyncStorage.getItem("@Posts");
-      const dataParsed = JSON.parse(data);
-      setPosts(dataParsed);
-    }
-    const dataParsed = JSON.parse(data);
-    setPosts(dataParsed);
-  }
+  useEffect(() => {
+    async function loadStorageData(): Promise<void> {
+      try {
+        const dataPosts = await AsyncStorage.getItem('@Posts');
+        const value = JSON.parse(dataPosts);
 
-  getDataPosts();
+        if (value && value.length) {
+          setPosts(value);
+        } else {
+          fetch('https://jsonplaceholder.typicode.com/posts').then(
+            response => {
+              response.json().then(data => {
+                setPosts(data);
+                AsyncStorage.setItem('@Posts', JSON.stringify(data));
+              })
+            }
+          )
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    loadStorageData();
+  }, []);
 
   return (
     <Container>
@@ -50,14 +57,14 @@ const Posts: React.FC = () => {
               initialNumToRender={3}
               removeClippedSubviews={true}
               contentContainerStyle={{ paddingVertical: 16 }}
-              keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <CardPost>
-                  <Title>{item.title}</Title>
-                  <SeparatorLine />
-                  <BodyText>{item.body}</BodyText>
-                </CardPost>
+              getItemLayout={(data, index) => ({
+                length: 200,
+                offset: 200 * index,
+                index
+              })}
+              renderItem={({ item }: any) => (
+                <PostCard key={item.id} post={item} />
               )}
             />
           }

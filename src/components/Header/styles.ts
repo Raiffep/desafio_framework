@@ -3,7 +3,7 @@ import { theme } from '../../themes';
 
 export const Container = styled.View`
   width: 100%;
-  height: 50px;
+  height: 60px;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;

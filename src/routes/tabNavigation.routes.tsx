@@ -10,9 +10,10 @@ import TodosScreen from '../pages/todos';
 const TabStack = createBottomTabNavigator();
 
 const TabRoutes = () => {
-  return(
+  return (
     <TabStack.Navigator
       tabBarOptions={{
+        activeTintColor: theme.primary,
         style: {
           height: 65,
           paddingTop: 5,
@@ -26,25 +27,37 @@ const TabRoutes = () => {
         options={{
           tabBarLabel: "Postagens",
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons name={'note-plus'} size={size} color={focused ? theme.primary : color } />
+            <MaterialIcons
+              size={size}
+              name={'note-plus'}
+              color={focused ? theme.primary : color}
+            />
           )
         }} />
-        <TabStack.Screen
+      <TabStack.Screen
         name="Albums"
         component={AlbumsScreen}
         options={{
           tabBarLabel: "Albums",
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons name={'image-album'} size={size} color={focused ? theme.primary : color} />
+            <MaterialIcons
+              size={size}
+              name={'image-multiple'}
+              color={focused ? theme.primary : color}
+            />
           )
         }} />
-        <TabStack.Screen
+      <TabStack.Screen
         name="To-dos"
         component={TodosScreen}
         options={{
           tabBarLabel: "To-dos",
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons name={'format-list-checks'} size={size} color={focused ? theme.primary : color} />
+            <MaterialIcons
+              size={size}
+              name={'format-list-checks'}
+              color={focused ? theme.primary : color}
+            />
           )
         }} />
     </TabStack.Navigator>

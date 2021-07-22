@@ -6,7 +6,3 @@ export const theme = {
   text: '#282828',
 
 };
-
-export const fonts = {
-  roboto: 'Roboto-Slab',
-}

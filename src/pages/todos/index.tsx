@@ -1,39 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { FlatList } from "react-native";
-import { Checkbox } from "react-native-paper";
-import Header from "../../components/Header";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { GetTodos } from "../../services/providers/todosProvider";
-import { theme } from "../../themes";
+import Header from "../../components/Header";
+import TodoCard from "../../components/TodoCard";
 
 import {
   Container,
   TitleHeader,
   BodyTodos,
-  CardTodo,
-  Title,
   SeparatorLine
 } from './styles';
 
 const Todos: React.FC = () => {
   const [todos, setTodos] = useState([]);
 
-  const getDataTodos = async () => {
-    let data = await AsyncStorage.getItem("@Todos");
-    if (!data) {
-      GetTodos();
-      data = await AsyncStorage.getItem("@Todos");
-      const dataParsed = JSON.parse(data);
-      setTodos(dataParsed);
+  useEffect(() => {
+    async function loadStorageData(): Promise<void> {
+      try {
+        const dataTodos: any = await AsyncStorage.getItem('@Todos');
+        const value = JSON.parse(dataTodos);
+        if (value && value.length) {
+          setTodos(value);
+        } else {
+          fetch('https://jsonplaceholder.typicode.com/todos').then(
+            response => {
+              response.json().then(data => {
+                setTodos(data);
+                AsyncStorage.setItem('@Todos', JSON.stringify(data));
+              })
+            }
+          )
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
-    const dataParsed = JSON.parse(data);
-    setTodos(dataParsed);
-  }
 
-  getDataTodos();
+    loadStorageData();
+  }, []);
 
-  const handlecheckTask = (index: number) => {
-    const listTodos = [...todos];
+  const handleCheckTask = (index: number) => {
+    const listTodos: [] = [...todos];
     listTodos[index].completed = !listTodos[index].completed;
     setTodos(listTodos);
   }
@@ -55,13 +62,11 @@ const Todos: React.FC = () => {
             keyExtractor={(item, index) => item.id.toString()}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
-              <CardTodo>
-                <Checkbox
-                  color={theme.primary}
-                  onPress={() => handlecheckTask(index)}
-                  status={item.completed ? 'checked' : 'unchecked'} />
-                <Title isChecked={item.completed}>{item.title}</Title>
-              </CardTodo>
+              <TodoCard
+                item={item}
+                index={index}
+                handleCheckTask={handleCheckTask}
+              />
             )}
           />
         }

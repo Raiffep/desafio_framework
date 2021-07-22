@@ -1,29 +1,37 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { GetAlbums } from "../../services/providers/albumsProvider";
 import { FlatList } from "react-native";
 import Header from "../../components/Header";
-
-import { Container, TitleHeader, BodyPosts, CardPost, Title } from './styles';
+import ImageCard from "../../components/ImageCard";
+import { Container, TitleHeader, BodyPosts } from './styles';
 
 const Albums: React.FC = () => {
   const [albums, setAlbums] = useState([]);
 
-  const getDataAlbums = async () => {
-    let data = await AsyncStorage.getItem("@Albums");
-    if (!data) {
-      GetAlbums();
-      data = await AsyncStorage.getItem("@Albums");
-      const dataParsed = JSON.parse(data);
-      setAlbums(dataParsed);
+  useEffect(() => {
+    async function loadStorageData(): Promise<void> {
+      try {
+        const dataAlbums = await AsyncStorage.getItem('@Albums');
+        const value = JSON.parse(dataAlbums);
+        if (value && value.length) {
+          setAlbums(value);
+        } else {
+          fetch('https://jsonplaceholder.typicode.com/albums').then(
+            response => {
+              response.json().then(data => {
+                setAlbums(data);
+                AsyncStorage.setItem('@Albums', JSON.stringify(data));
+              })
+            }
+          )
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
-    if (data !== JSON.stringify(albums)) {
-      const dataParsed = JSON.parse(data);
-      setAlbums(dataParsed);
-    }
-  }
 
-  getDataAlbums();
+    loadStorageData();
+  }, []);
 
   return (
     <Container>
@@ -34,16 +42,15 @@ const Albums: React.FC = () => {
         {albums &&
           <FlatList
             data={albums}
+            numColumns={2}
             windowSize={10}
             initialNumToRender={6}
             removeClippedSubviews={true}
-            contentContainerStyle={{ paddingVertical: 16 }}
-            keyExtractor={(item, index) => item.id.toString()}
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingVertical: 16 }}
+            columnWrapperStyle={{ justifyContent: 'space-between' }}
             renderItem={({ item }) => (
-              <CardPost>
-                <Title>{item.title}</Title>
-              </CardPost>
+              <ImageCard key={item.id} item={item} />
             )}
           />
         }
