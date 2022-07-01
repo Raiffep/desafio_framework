@@ -23,3 +23,10 @@ export const SeparatorLine = styled.View`
   background-color: ${theme.surface};
 `;
 
+export const ListTodos = styled.FlatList.attrs({
+  windowSize: 10,
+  initialNumToRender: 10,
+  removeClippedSubviews: true,
+  showsVerticalScrollIndicator: false,
+  contentContainerStyle: { paddingBottom: 16 }
+})``;

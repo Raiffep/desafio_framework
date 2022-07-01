@@ -1,69 +1,59 @@
 import React, { useState, useEffect } from "react";
-import { FlatList } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Header from "../../components/Header";
-import TodoCard from "../../components/TodoCard";
-
+import { Header, TodoCard } from "../../components";
 import {
   Container,
   TitleHeader,
   BodyTodos,
-  SeparatorLine
+  SeparatorLine,
+  ListTodos
 } from './styles';
+import { GetTodos, ITodo } from "../../services/TodosService";
 
 const Todos: React.FC = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<ITodo[]>([]);
+  const listTodosStorekey = '@Todos';
+
+  const loadStorageData = async () => {
+    try {
+      const dataTodos = await AsyncStorage.getItem(listTodosStorekey);
+      const parsedTodos = dataTodos && JSON.parse(dataTodos);
+      if (parsedTodos?.length) {
+        setTodos(parsedTodos);
+        return;
+      }
+      const response = await GetTodos();
+      if (response) {
+        setTodos(response);
+        await AsyncStorage.setItem(listTodosStorekey, JSON.stringify(response));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
-    async function loadStorageData(): Promise<void> {
-      try {
-        const dataTodos: any = await AsyncStorage.getItem('@Todos');
-        const value = JSON.parse(dataTodos);
-        if (value && value.length) {
-          setTodos(value);
-        } else {
-          fetch('https://jsonplaceholder.typicode.com/todos').then(
-            response => {
-              response.json().then(data => {
-                setTodos(data);
-                AsyncStorage.setItem('@Todos', JSON.stringify(data));
-              })
-            }
-          )
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
     loadStorageData();
   }, []);
 
   const handleCheckTask = (index: number) => {
-    const listTodos: [] = [...todos];
+    const listTodos: ITodo[] = [...todos];
     listTodos[index].completed = !listTodos[index].completed;
     setTodos(listTodos);
   }
 
   return (
     <Container>
-      <Header
-        rightComponent={<TitleHeader>To-Dos</TitleHeader>}
-      />
+      <Header rightComponent={<TitleHeader>To-Dos</TitleHeader>} />
       <BodyTodos>
         {todos &&
-          <FlatList
+          <ListTodos
             data={todos}
-            windowSize={10}
-            initialNumToRender={10}
-            removeClippedSubviews={true}
-            contentContainerStyle={{ paddingBottom: 16 }}
+            keyExtractor={(item, index) => String(index)}
             ItemSeparatorComponent={() => <SeparatorLine />}
-            keyExtractor={(item, index) => item.id.toString()}
-            showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
               <TodoCard
-                item={item}
+                item={item as ITodo}
                 index={index}
                 handleCheckTask={handleCheckTask}
               />
