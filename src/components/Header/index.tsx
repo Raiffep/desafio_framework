@@ -4,12 +4,10 @@ interface IHeaderProps {
   rightComponent: ReactElement
 }
 
-const Header = ({ rightComponent }: IHeaderProps) => {
+export const Header = ({ rightComponent }: IHeaderProps) => {
   return (
     <Container>
       {rightComponent}
     </Container>
   );
-}
-
-export default Header;
+};

@@ -15,7 +15,7 @@ interface ITodoProps {
   handleCheckTask: (index: number) => void;
 }
 
-const TodoCard = ({ item, index, handleCheckTask }: ITodoProps) => {
+export const TodoCard = memo(({ item, index, handleCheckTask }: ITodoProps) => {
   const [checked, setChecked] = useState(item.completed);
 
   return (
@@ -30,6 +30,4 @@ const TodoCard = ({ item, index, handleCheckTask }: ITodoProps) => {
       <Title isChecked={checked}>{item.title}</Title>
     </CardTodo>
   );
-}
-
-export default memo(TodoCard);
+})

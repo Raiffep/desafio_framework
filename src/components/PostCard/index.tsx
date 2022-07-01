@@ -13,7 +13,7 @@ interface IPost {
   }
 }
 
-const PostCard = ({ post }: IPost) => {
+export const PostCard = memo(({ post }: IPost) => {
   return (
     <CardPost>
       <Title>{post.title}</Title>
@@ -21,6 +21,4 @@ const PostCard = ({ post }: IPost) => {
       <BodyText>{post.body}</BodyText>
     </CardPost>
   );
-}
-
-export default memo(PostCard);
+});

@@ -10,12 +10,10 @@ interface IPost {
   }
 }
 
-const ImageCard = ({ item }: IPost) => {
+export const ImageCard = memo(({ item }: IPost) => {
   return (
     <ContainerCard>
       <Title>{item.title}</Title>
     </ContainerCard>
   );
-}
-
-export default memo(ImageCard);
+})

@@ -38,3 +38,13 @@ export const BodyText = styled.Text`
   font-weight: 400;
   color: ${theme.text};
 `;
+
+export const AlbunsList = styled.FlatList.attrs({
+  numColumns: 2,
+  windowSize: 10,
+  initialNumToRender: 6,
+  removeClippedSubviews: true,
+  showsVerticalScrollIndicator: false,
+  contentContainerStyle: { paddingVertical: 16 },
+  columnWrapperStyle: { justifyContent: 'space-between' }
+})``;
