@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
-import { theme, fonts } from '../../themes';
+import { theme } from '../../themes';
 
 const { width } = Dimensions.get('window');
 
@@ -40,3 +40,11 @@ export const LoadingText = styled.Text`
   color: ${theme.primary};
   margin-left: 10px;
 `;
+
+export const ListPosts = styled.FlatList.attrs({
+  windowSize: 10,
+  initialNumToRender: 3,
+  removeClippedSubviews: true,
+  contentContainerStyle: { paddingVertical: 16 },
+  showsVerticalScrollIndicator: false
+})``;

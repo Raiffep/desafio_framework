@@ -1,71 +1,59 @@
 import React, { useState, useEffect } from "react";
-import { FlatList } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Header from "../../components/Header";
-import PostCard from "../../components/PostCard";
+import { GetPosts, IPost } from "../../services/PostsService";
+import { Header, PostCard } from "../../components";
 import {
   Container,
   TitleHeader,
   BodyPosts,
   ViewLoading,
   LoadingIcon,
-  LoadingText
+  LoadingText,
+  ListPosts
 } from './styles';
 
-
 const Posts: React.FC = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [loading, setLoading] = useState(false);
+  const postStoreKey = '@Posts';
+
+  const loadStorageData = async () => {
+    try {
+      const dataPosts = await AsyncStorage.getItem(postStoreKey);
+      const parsedPosts: IPost[] = dataPosts && JSON.parse(dataPosts);
+      if (parsedPosts.length) {
+        setPosts(parsedPosts);
+        return;
+      }
+      const response = await GetPosts();
+      if (response) {
+        setPosts(response);
+        await AsyncStorage.setItem(postStoreKey, JSON.stringify(response));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
-    async function loadStorageData(): Promise<void> {
-      try {
-        const dataPosts = await AsyncStorage.getItem('@Posts');
-        const value = JSON.parse(dataPosts);
-
-        if (value && value.length) {
-          setPosts(value);
-        } else {
-          fetch('https://jsonplaceholder.typicode.com/posts').then(
-            response => {
-              response.json().then(data => {
-                setPosts(data);
-                AsyncStorage.setItem('@Posts', JSON.stringify(data));
-              })
-            }
-          )
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
     loadStorageData();
   }, []);
 
   return (
     <Container>
-      <Header
-        rightComponent={<TitleHeader>Postagens</TitleHeader>}
-      />
+      <Header rightComponent={<TitleHeader>Postagens</TitleHeader>} />
       {!loading ? (
         <BodyPosts>
           {posts &&
-            <FlatList
+            <ListPosts
               data={posts}
-              windowSize={10}
-              initialNumToRender={3}
-              removeClippedSubviews={true}
-              contentContainerStyle={{ paddingVertical: 16 }}
-              showsVerticalScrollIndicator={false}
+              keyExtractor={(item, index) => String(index)}
+              renderItem={({ item }) => <PostCard post={item as IPost} />}
               getItemLayout={(data, index) => ({
                 length: 200,
                 offset: 200 * index,
                 index
               })}
-              renderItem={({ item }: any) => (
-                <PostCard key={item.id} post={item} />
-              )}
             />
           }
         </BodyPosts>

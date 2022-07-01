@@ -11,15 +11,12 @@ const Albuns: React.FC = () => {
   const loadStorageData = async () => {
     try {
       const dataAlbums = await AsyncStorage.getItem(listAlbunsStoreKey);
-      const parsedAlbuns = dataAlbums && JSON.parse(dataAlbums);
-
+      const parsedAlbuns: IAlbum[] = dataAlbums && JSON.parse(dataAlbums);
       if (parsedAlbuns?.length) {
         setAlbuns(parsedAlbuns);
         return;
       }
-
       const response = await GetAlbuns();
-
       if (response) {
         setAlbuns(response);
         await AsyncStorage.setItem(listAlbunsStoreKey, JSON.stringify(response));
