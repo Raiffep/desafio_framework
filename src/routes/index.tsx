@@ -3,9 +3,7 @@ import React from 'react';
 import TabBottomRoutes from './tabNavigation.routes';
 
 const AppNavigation: React.FC = () => {
-  return (
-    <TabBottomRoutes />
-  )
+  return <TabBottomRoutes />;
 };
 
 export default AppNavigation;

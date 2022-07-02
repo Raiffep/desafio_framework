@@ -12,7 +12,7 @@ import {
   ListPosts
 } from './styles';
 
-const Posts: React.FC = () => {
+export const Posts: React.FC = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [loading, setLoading] = useState(false);
   const postStoreKey = '@Posts';
@@ -41,7 +41,7 @@ const Posts: React.FC = () => {
 
   return (
     <Container>
-      <Header rightComponent={<TitleHeader>Postagens</TitleHeader>} />
+      <Header><TitleHeader>Postagens</TitleHeader></Header>
       {!loading ? (
         <BodyPosts>
           {posts &&
@@ -66,5 +66,3 @@ const Posts: React.FC = () => {
     </Container>
   )
 };
-
-export default Posts;

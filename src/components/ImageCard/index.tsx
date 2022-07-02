@@ -1,9 +1,5 @@
 import React, { memo } from 'react';
-import {
-  ContainerCard,
-  Title
-} from './styles';
-
+import { ContainerCard, Title } from './styles';
 interface IPost {
   item: {
     title: string;

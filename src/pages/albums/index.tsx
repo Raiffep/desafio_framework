@@ -4,7 +4,7 @@ import { GetAlbuns, IAlbum } from "../../services/AlbunsService";
 import { Header, ImageCard } from "../../components";
 import { Container, TitleHeader, BodyPosts, AlbunsList } from './styles';
 
-const Albuns: React.FC = () => {
+export const Albuns: React.FC = () => {
   const [albuns, setAlbuns] = useState<IAlbum[]>([]);
   const listAlbunsStoreKey = '@Albuns';
 
@@ -32,7 +32,7 @@ const Albuns: React.FC = () => {
 
   return (
     <Container>
-      <Header rightComponent={<TitleHeader>Albums</TitleHeader>} />
+      <Header><TitleHeader>Albums</TitleHeader></Header>
       <BodyPosts>
         {albuns &&
           <AlbunsList
@@ -45,5 +45,3 @@ const Albuns: React.FC = () => {
     </Container>
   )
 };
-
-export default Albuns;

@@ -10,7 +10,7 @@ import {
 } from './styles';
 import { GetTodos, ITodo } from "../../services/TodosService";
 
-const Todos: React.FC = () => {
+export const Todos: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
   const listTodosStorekey = '@Todos';
 
@@ -44,7 +44,7 @@ const Todos: React.FC = () => {
 
   return (
     <Container>
-      <Header rightComponent={<TitleHeader>To-Dos</TitleHeader>} />
+      <Header><TitleHeader>To-Dos</TitleHeader></Header>
       <BodyTodos>
         {todos &&
           <ListTodos
@@ -64,5 +64,3 @@ const Todos: React.FC = () => {
     </Container>
   )
 };
-
-export default Todos;

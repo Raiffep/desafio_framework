@@ -1,13 +1,11 @@
-import React, { ReactElement } from 'react';
+import React, { ReactNode } from 'react';
 import { Container } from './styles';
 interface IHeaderProps {
-  rightComponent: ReactElement
+  children: ReactNode
 }
 
-export const Header = ({ rightComponent }: IHeaderProps) => {
+export const Header = ({ children }: IHeaderProps) => {
   return (
-    <Container>
-      {rightComponent}
-    </Container>
+    <Container>{children}</Container>
   );
 };

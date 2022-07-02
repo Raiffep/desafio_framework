@@ -1,11 +1,7 @@
 import React, { useState, memo } from 'react';
 import { Checkbox } from 'react-native-paper';
 import { theme } from '../../themes';;
-import {
-  CardTodo,
-  Title,
-} from './styles';
-
+import { CardTodo, Title } from './styles';
 interface ITodoProps {
   item: {
     completed: boolean;

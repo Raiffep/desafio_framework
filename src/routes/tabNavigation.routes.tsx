@@ -2,10 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { theme } from '../themes';
-import PostScreen from "../pages/posts";
-import AlbumsScreen from '../pages/albums';
-import TodosScreen from '../pages/todos';
-
+import { Posts, Albuns, Todos } from "../pages";
 
 const TabStack = createBottomTabNavigator();
 
@@ -23,7 +20,7 @@ const TabRoutes = () => {
       }}>
       <TabStack.Screen
         name="Postagens"
-        component={PostScreen}
+        component={Posts}
         options={{
           tabBarLabel: "Postagens",
           tabBarIcon: ({ color, size, focused }) => (
@@ -36,7 +33,7 @@ const TabRoutes = () => {
         }} />
       <TabStack.Screen
         name="Albums"
-        component={AlbumsScreen}
+        component={Albuns}
         options={{
           tabBarLabel: "Albums",
           tabBarIcon: ({ color, size, focused }) => (
@@ -49,7 +46,7 @@ const TabRoutes = () => {
         }} />
       <TabStack.Screen
         name="To-dos"
-        component={TodosScreen}
+        component={Todos}
         options={{
           tabBarLabel: "To-dos",
           tabBarIcon: ({ color, size, focused }) => (
